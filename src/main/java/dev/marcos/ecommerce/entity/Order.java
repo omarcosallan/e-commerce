@@ -1,6 +1,7 @@
 package dev.marcos.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import dev.marcos.ecommerce.audit.Auditable;
 import dev.marcos.ecommerce.entity.enums.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -11,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tb_orders")
-public class Order {
+public class Order extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

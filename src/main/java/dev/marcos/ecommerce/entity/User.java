@@ -1,12 +1,11 @@
 package dev.marcos.ecommerce.entity;
 
+import dev.marcos.ecommerce.audit.Auditable;
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_users")
-public class User {
+public class User extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

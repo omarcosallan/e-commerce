@@ -1,5 +1,6 @@
 package dev.marcos.ecommerce.entity;
 
+import dev.marcos.ecommerce.audit.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -8,7 +9,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "tb_products")
-public class Product {
+public class Product extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,11 +1,17 @@
 package dev.marcos.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.marcos.ecommerce.audit.Auditable;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_users")
-public class User extends Auditable {
+public class User extends Auditable implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +23,7 @@ public class User extends Auditable {
     @Column(unique = true, nullable = false, length = 120)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
@@ -48,6 +55,16 @@ public class User extends Auditable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return passwordHash;
     }
 
     public String getUsername() {

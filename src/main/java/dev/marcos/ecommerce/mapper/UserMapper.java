@@ -11,6 +11,7 @@ public class UserMapper {
                 u.getLastName(),
                 u.getEmail(),
                 u.getUsername(),
-                u.getCreatedDate());
+                u.getCreatedDate(),
+                u.getRole());
     }
 }

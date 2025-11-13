@@ -1,0 +1,3 @@
+ALTER TABLE tb_users
+    ADD COLUMN role VARCHAR(50) NOT NULL CHECK (role IN ('ADMIN', 'USER'))
+        DEFAULT 'USER';

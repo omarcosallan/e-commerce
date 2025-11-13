@@ -4,6 +4,7 @@ import dev.marcos.ecommerce.dto.LoginRequest;
 import dev.marcos.ecommerce.dto.RegisterRequest;
 import dev.marcos.ecommerce.dto.user.UserDTO;
 import dev.marcos.ecommerce.entity.User;
+import dev.marcos.ecommerce.entity.enums.Role;
 import dev.marcos.ecommerce.mapper.UserMapper;
 import dev.marcos.ecommerce.repository.UserRepository;
 import dev.marcos.ecommerce.security.TokenService;
@@ -35,7 +36,7 @@ public class AuthService {
             throw new RuntimeException("Username inválido");
         }
 
-        User user = new User(null, dto.username(), dto.email(), null, dto.firstName(), dto.lastName(), null);
+        User user = new User(null, dto.username(), dto.email(), null, dto.firstName(), dto.lastName(), null, Role.USER);
         String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
         user.setPasswordHash(encryptedPassword);
 

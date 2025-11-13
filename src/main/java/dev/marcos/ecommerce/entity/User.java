@@ -2,6 +2,7 @@ package dev.marcos.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.marcos.ecommerce.audit.Auditable;
+import dev.marcos.ecommerce.entity.enums.Role;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,9 +38,13 @@ public class User extends Auditable implements UserDetails {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 50)
+    private Role role;
+
     protected User() {}
 
-    public User(Long id, String username, String email, String passwordHash, String firstName, String lastName, Address address) {
+    public User(Long id, String username, String email, String passwordHash, String firstName, String lastName, Address address, Role role) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -47,6 +52,7 @@ public class User extends Auditable implements UserDetails {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+        this.role = role;
     }
 
     public Long getId() {
@@ -113,5 +119,13 @@ public class User extends Auditable implements UserDetails {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

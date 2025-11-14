@@ -1,8 +1,8 @@
 package dev.marcos.ecommerce.controller;
 
-import dev.marcos.ecommerce.dto.LoginRequest;
-import dev.marcos.ecommerce.dto.RegisterRequest;
-import dev.marcos.ecommerce.dto.user.UserDTO;
+import dev.marcos.ecommerce.model.dto.LoginRequest;
+import dev.marcos.ecommerce.model.dto.RegisterRequest;
+import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
 package dev.marcos.ecommerce.mapper;
 
-import dev.marcos.ecommerce.dto.user.UserDTO;
+import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.entity.User;
 
 public class UserMapper {

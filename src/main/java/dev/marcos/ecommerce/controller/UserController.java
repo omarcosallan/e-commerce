@@ -1,6 +1,6 @@
 package dev.marcos.ecommerce.controller;
 
-import dev.marcos.ecommerce.dto.user.UserDTO;
+import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package dev.marcos.ecommerce.dto.user;
+package dev.marcos.ecommerce.model.dto.user;
 
 import dev.marcos.ecommerce.entity.enums.Role;
 

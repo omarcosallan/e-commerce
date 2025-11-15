@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -45,6 +46,13 @@ public class GlobalExceptionHandler {
         ErrorResponse error = toErrorResponse("Dados inválidos", req, HttpStatus.BAD_REQUEST);
         error.setProperty("errors", errors);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException e, WebRequest req) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ErrorResponse error = toErrorResponse("Não é possível acessar este recurso", req, status);
+        return new ResponseEntity<>(error, status);
     }
 
     @ExceptionHandler({

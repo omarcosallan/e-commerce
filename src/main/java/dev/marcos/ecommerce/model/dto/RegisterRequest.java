@@ -1,5 +1,6 @@
 package dev.marcos.ecommerce.model.dto;
 
+import dev.marcos.ecommerce.entity.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -17,5 +18,6 @@ public record RegisterRequest(@NotNull(message = "Username é obrigatório")
                                       message = "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.")
                               String password,
                               @Size(max = 50) String firstName,
-                              @Size(max = 50) String lastName) {
+                              @Size(max = 50) String lastName,
+                              Role role) {
 }

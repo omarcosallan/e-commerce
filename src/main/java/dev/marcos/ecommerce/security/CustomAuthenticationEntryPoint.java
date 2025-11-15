@@ -26,12 +26,11 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
-        System.out.println(request.getRequestURI());
-        ErrorResponse pd = new ErrorResponse(LocalDateTime.now(), "Autenticação necessária", request.getRequestURI(), status, status.value());
+        ErrorResponse error = new ErrorResponse(LocalDateTime.now(), "Autenticação necessária", request.getRequestURI(), status, status.value());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(status.value());
 
-        response.getWriter().write(mapper.writeValueAsString(pd));
+        response.getWriter().write(mapper.writeValueAsString(error));
     }
 }

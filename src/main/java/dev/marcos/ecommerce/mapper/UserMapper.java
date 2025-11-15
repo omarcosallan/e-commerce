@@ -17,4 +17,17 @@ public class UserMapper {
                 u.getLastModifiedBy(),
                 u.getLastModifiedDate());
     }
+
+    public static User toEntity(UserDTO u) {
+        return new User(
+                u.id(),
+                u.username(),
+                u.email(),
+                null,
+                u.firstName(),
+                u.lastName(),
+                null,
+                u.role()
+        );
+    }
 }

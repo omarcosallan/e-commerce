@@ -37,7 +37,7 @@ public class User extends Auditable implements UserDetails {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Address> address = new HashSet<>();
 
     @Enumerated(EnumType.STRING)

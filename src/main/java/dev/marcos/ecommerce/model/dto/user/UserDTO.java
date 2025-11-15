@@ -10,8 +10,8 @@ public record UserDTO(Long id,
                       String email,
                       String username,
                       Role role,
-                      String createdBy,
+                      Long createdBy,
                       LocalDateTime createdDate,
-                      String lastModifiedBy,
+                      Long lastModifiedBy,
                       LocalDateTime lastModifiedDate) {
 }

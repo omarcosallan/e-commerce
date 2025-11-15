@@ -4,6 +4,7 @@ import dev.marcos.ecommerce.entity.enums.Role;
 import dev.marcos.ecommerce.exception.ResourceAlreadyExistsException;
 import dev.marcos.ecommerce.exception.ResourceNotFoundException;
 import dev.marcos.ecommerce.model.dto.UserCreateRequest;
+import dev.marcos.ecommerce.model.dto.UserUpdateRequest;
 import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.entity.User;
 import dev.marcos.ecommerce.mapper.UserMapper;
@@ -62,7 +63,52 @@ public class UserService {
         return UserMapper.toDTO(user);
     }
 
+    public UserDTO updateUser(Long id, @Valid UserUpdateRequest dto) {
+        User user = getUser(id);
+        if (validEmail(dto.email(), user)) {
+            user.setEmail(dto.email());
+        }
+        if (validUsername(dto.username(), user)) {
+            user.setUsername(dto.username());
+        }
+        if (dto.firstName() != null) {
+            user.setFirstName(dto.firstName());
+        }
+        if (dto.lastName() != null) {
+            user.setLastName(dto.lastName());
+        }
+        if (dto.role() != null) {
+            user.setRole(dto.role());
+        }
+
+        repository.save(user);
+
+        return UserMapper.toDTO(user);
+    }
+
     private User getUser(long id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+    }
+
+    private boolean validEmail(String email, User user) {
+        if (email == null) {
+            return false;
+        }
+        boolean existsEmail = repository.existsByEmail(email);
+        if (existsEmail && !user.getEmail().equals(email)) {
+            throw new ResourceAlreadyExistsException("Dados ausentes ou inválidos");
+        }
+        return true;
+    }
+
+    private boolean validUsername(String username, User user) {
+        if (username == null) {
+            return false;
+        }
+        boolean existsUsername = repository.existsByUsername(username);
+        if (existsUsername && !user.getUsername().equals(username)) {
+            throw new ResourceAlreadyExistsException("Dados ausentes ou inválidos");
+        }
+        return true;
     }
 }

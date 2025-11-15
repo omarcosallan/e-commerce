@@ -1,6 +1,7 @@
 package dev.marcos.ecommerce.controller;
 
 import dev.marcos.ecommerce.model.dto.UserCreateRequest;
+import dev.marcos.ecommerce.model.dto.UserUpdateRequest;
 import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.model.PaginatedResponse;
 import dev.marcos.ecommerce.service.UserService;
@@ -42,5 +43,11 @@ public class UserController {
         UserDTO user = service.save(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.id()).toUri();
         return ResponseEntity.created(uri).body(user);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest dto) {
+        return ResponseEntity.ok(service.updateUser(id, dto));
     }
 }

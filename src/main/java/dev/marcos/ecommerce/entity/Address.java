@@ -1,5 +1,6 @@
 package dev.marcos.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
@@ -28,6 +29,11 @@ public class Address {
 
     @Column(nullable = false)
     private String postalCode;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User users;
 
     protected Address() {}
 

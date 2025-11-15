@@ -9,7 +9,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_users")
@@ -35,9 +37,8 @@ public class User extends Auditable implements UserDetails {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id")
-    private Address address;
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Address> address = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
@@ -45,7 +46,7 @@ public class User extends Auditable implements UserDetails {
 
     protected User() {}
 
-    public User(Long id, String username, String email, String passwordHash, String firstName, String lastName, Address address, Role role) {
+    public User(Long id, String username, String email, String passwordHash, String firstName, String lastName, Set<Address> address, Role role) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -114,12 +115,8 @@ public class User extends Auditable implements UserDetails {
         this.lastName = lastName;
     }
 
-    public Address getAddress() {
+    public Set<Address> getAddress() {
         return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public Role getRole() {

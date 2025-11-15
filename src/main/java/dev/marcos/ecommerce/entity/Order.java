@@ -30,14 +30,14 @@ public class Order extends Auditable {
     private OrderStatus status;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @OneToOne(mappedBy = "order")
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToMany(mappedBy = "id.order")
+    @OneToMany(mappedBy = "id.order", cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<OrderItem> items = new HashSet<>();
 
     protected Order() {

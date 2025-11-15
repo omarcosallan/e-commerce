@@ -1,7 +1,7 @@
 package dev.marcos.ecommerce.service;
 
 import dev.marcos.ecommerce.model.dto.LoginRequest;
-import dev.marcos.ecommerce.model.dto.RegisterRequest;
+import dev.marcos.ecommerce.model.dto.UserCreateRequest;
 import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.entity.User;
 import dev.marcos.ecommerce.entity.enums.Role;
@@ -29,7 +29,7 @@ public class AuthService {
     }
 
     @Transactional
-    public UserDTO save(RegisterRequest dto) {
+    public UserDTO save(UserCreateRequest dto) {
         if (repository.existsByEmail(dto.email()) || repository.existsByUsername(dto.username())) {
             throw new ResourceAlreadyExistsException("Dados ausentes ou inválidos");
         }

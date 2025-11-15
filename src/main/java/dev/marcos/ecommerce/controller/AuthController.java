@@ -1,7 +1,7 @@
 package dev.marcos.ecommerce.controller;
 
 import dev.marcos.ecommerce.model.dto.LoginRequest;
-import dev.marcos.ecommerce.model.dto.RegisterRequest;
+import dev.marcos.ecommerce.model.dto.UserCreateRequest;
 import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.service.AuthService;
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDTO> register(@Valid @RequestBody RegisterRequest dto) {
+    public ResponseEntity<UserDTO> register(@Valid @RequestBody UserCreateRequest dto) {
         UserDTO user = service.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }

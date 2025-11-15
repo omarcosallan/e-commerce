@@ -1,6 +1,6 @@
 package dev.marcos.ecommerce.controller;
 
-import dev.marcos.ecommerce.model.dto.RegisterRequest;
+import dev.marcos.ecommerce.model.dto.UserCreateRequest;
 import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.model.PaginatedResponse;
 import dev.marcos.ecommerce.service.UserService;
@@ -38,7 +38,7 @@ public class UserController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody RegisterRequest dto) {
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserCreateRequest dto) {
         UserDTO user = service.save(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.id()).toUri();
         return ResponseEntity.created(uri).body(user);

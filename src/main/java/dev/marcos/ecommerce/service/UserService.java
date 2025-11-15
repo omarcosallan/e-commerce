@@ -3,7 +3,7 @@ package dev.marcos.ecommerce.service;
 import dev.marcos.ecommerce.entity.enums.Role;
 import dev.marcos.ecommerce.exception.ResourceAlreadyExistsException;
 import dev.marcos.ecommerce.exception.ResourceNotFoundException;
-import dev.marcos.ecommerce.model.dto.RegisterRequest;
+import dev.marcos.ecommerce.model.dto.UserCreateRequest;
 import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.entity.User;
 import dev.marcos.ecommerce.mapper.UserMapper;
@@ -47,7 +47,7 @@ public class UserService {
         return UserMapper.toDTO(getUser(id));
     }
 
-    public UserDTO save(@Valid RegisterRequest dto) {
+    public UserDTO save(@Valid UserCreateRequest dto) {
         if (repository.existsByEmail(dto.email()) || repository.existsByUsername(dto.username())) {
             throw new ResourceAlreadyExistsException("Dados ausentes ou inválidos");
         }

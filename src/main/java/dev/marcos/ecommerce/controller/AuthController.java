@@ -24,13 +24,13 @@ public class AuthController {
         this.service = service;
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("/signup")
     public ResponseEntity<UserDTO> register(@Valid @RequestBody RegisterRequest dto) {
         UserDTO user = service.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @PostMapping("/sign-in")
+    @PostMapping("/signin")
     public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginRequest dto) {
         String token = service.login(dto);
         return ResponseEntity.ok(Map.of("token", token));

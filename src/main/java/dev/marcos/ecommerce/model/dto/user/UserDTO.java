@@ -9,6 +9,9 @@ public record UserDTO(Long id,
                       String lastName,
                       String email,
                       String username,
-                      LocalDateTime createdAt,
-                      Role role) {
+                      Role role,
+                      String createdBy,
+                      LocalDateTime createdDate,
+                      String lastModifiedBy,
+                      LocalDateTime lastModifiedDate) {
 }

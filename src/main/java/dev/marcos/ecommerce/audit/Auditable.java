@@ -15,7 +15,7 @@ public class Auditable {
 
     @CreatedBy
     @Column(name = "created_by", updatable = false, length = 50)
-    private String createdBy;
+    private Long createdBy;
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
@@ -24,14 +24,14 @@ public class Auditable {
 
     @LastModifiedBy
     @Column(name = "last_modified_by", length = 50)
-    private String lastModifiedBy;
+    private Long lastModifiedBy;
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
 
-    public String getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
@@ -39,7 +39,7 @@ public class Auditable {
         return createdDate;
     }
 
-    public String getLastModifiedBy() {
+    public Long getLastModifiedBy() {
         return lastModifiedBy;
     }
 

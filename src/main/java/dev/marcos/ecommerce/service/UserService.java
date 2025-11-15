@@ -3,6 +3,7 @@
 
 package dev.marcos.ecommerce.service;
 
+import dev.marcos.ecommerce.exception.ResourceNotFoundException;
 import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.entity.User;
 import dev.marcos.ecommerce.mapper.UserMapper;
@@ -38,5 +39,13 @@ public class UserService {
                 page.hasNext(),
                 page.hasPrevious()
         );
+    }
+
+    public UserDTO findById(long id) {
+        return UserMapper.toDTO(getUser(id));
+    }
+
+    private User getUser(long id) {
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
     }
 }

@@ -5,10 +5,7 @@ import dev.marcos.ecommerce.model.PaginatedResponse;
 import dev.marcos.ecommerce.service.UserService;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -26,5 +23,10 @@ public class UserController {
                                                                @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
                                                                @RequestParam(required = false, defaultValue = "lastModifiedDate") String sortField) {
         return ResponseEntity.ok().body(service.findAll(page, size, direction, sortField));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable long id) {
+        return ResponseEntity.ok(service.findById(id));
     }
 }

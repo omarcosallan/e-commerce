@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class UserService {
         return UserMapper.toDTO(getUser(id));
     }
 
+    @Transactional
     public UserDTO save(@Valid UserCreateRequest dto) {
         if (repository.existsByEmail(dto.email()) || repository.existsByUsername(dto.username())) {
             throw new ResourceAlreadyExistsException("Dados ausentes ou inválidos");
@@ -63,6 +65,7 @@ public class UserService {
         return UserMapper.toDTO(user);
     }
 
+    @Transactional
     public UserDTO updateUser(Long id, @Valid UserUpdateRequest dto) {
         User user = getUser(id);
         if (validEmail(dto.email(), user)) {

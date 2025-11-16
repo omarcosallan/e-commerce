@@ -10,6 +10,7 @@ import dev.marcos.ecommerce.model.dto.address.AddressCreateRequest;
 import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.repository.AddressRepository;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,30 +19,39 @@ import java.util.List;
 @Service
 public class AddressService {
 
-    private final AddressRepository repository;
+    private final AddressRepository addressRepository;
+    private final UserService userService;
 
-    public AddressService(AddressRepository repository) {
-        this.repository = repository;
+    public AddressService(AddressRepository addressRepository, UserService userService) {
+        this.addressRepository = addressRepository;
+        this.userService = userService;
     }
 
     @Transactional
-    public Address save(UserDTO userDTO, AddressCreateRequest dto) {
-        Address address = AddressMapper.toEntity(dto);
+    public Address save(Long userId, UserDetails userDetails, AddressCreateRequest dto) {
+        checkPermission((User) userDetails, userId);
+        UserDTO userDTO = userService.findById(userId);
         User user = UserMapper.toEntity(userDTO);
+        Address address = AddressMapper.toEntity(dto);
         address.setUser(user);
-        return repository.save(address);
+        return addressRepository.save(address);
     }
 
-    public List<Address> getAddress(UserDTO user) {
-        return repository.findAllByUserId(user.id());
+    public List<Address> getAddress(Long userId, UserDetails userDetails) {
+        checkPermission((User) userDetails, userId);
+        return addressRepository.findAllByUserId(userId);
     }
 
-    public void deleteById(Long id, UserDTO user) {
-        Address address = repository.findById(id)
+    @Transactional
+    public void deleteById(Long addressId, UserDetails userDetails) {
+        Address address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
-        if (user.role() == Role.ADMIN || address.getUser().getId().equals(user.id())) {
-            repository.delete(address);
-        } else {
+        checkPermission((User) userDetails, address.getUser().getId());
+        addressRepository.delete(address);
+    }
+
+    private void checkPermission(User user, Long userId) {
+        if (user.getRole() != Role.ADMIN && !user.getId().equals(userId)) {
             throw new AuthorizationDeniedException("Não é possível acessar este recurso");
         }
     }

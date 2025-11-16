@@ -7,10 +7,12 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -62,6 +64,20 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBadCredentialsException(Exception e, WebRequest req) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
         ErrorResponse error = toErrorResponse("Credenciais inválidas", req, status);
+        return new ResponseEntity<>(error, status);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException e, WebRequest req) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErrorResponse error = toErrorResponse("Rota não encontrada", req, status);
+        return new ResponseEntity<>(error, status);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e, WebRequest req) {
+        HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
+        ErrorResponse error = toErrorResponse("Método não suportado", req, status);
         return new ResponseEntity<>(error, status);
     }
 

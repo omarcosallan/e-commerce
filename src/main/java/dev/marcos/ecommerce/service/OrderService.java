@@ -10,6 +10,7 @@ import dev.marcos.ecommerce.model.dto.order.OrderDTO;
 import dev.marcos.ecommerce.model.dto.order.OrderItemRequest;
 import dev.marcos.ecommerce.model.dto.product.ProductDTO;
 import dev.marcos.ecommerce.repository.OrderRepository;
+import dev.marcos.ecommerce.utils.CheckPermission;
 import jakarta.validation.Valid;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -38,8 +39,10 @@ public class OrderService {
         return orderRepository.findAll().stream().map(OrderMapper::toDTO).toList();
     }
 
-    public OrderDTO findById(Long orderId) {
-        return OrderMapper.toDTO(getOrder(orderId));
+    public OrderDTO findById(UserDetails userDetails, Long orderId) {
+        Order order = getOrder(orderId);
+        CheckPermission.verify((User) userDetails, order.getUser().getId());
+        return OrderMapper.toDTO(order);
     }
 
     @Transactional
@@ -86,6 +89,14 @@ public class OrderService {
 
         orderRepository.save(order);
 
+        return OrderMapper.toDTO(order);
+    }
+
+    public OrderDTO cancel(UserDetails userDetails, Long orderId) {
+        Order order = getOrder(orderId);
+        CheckPermission.verify((User) userDetails, order.getUser().getId());
+        order.setStatus(OrderStatus.CANCELED);
+        orderRepository.save(order);
         return OrderMapper.toDTO(order);
     }
 

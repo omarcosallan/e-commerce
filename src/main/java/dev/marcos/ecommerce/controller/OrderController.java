@@ -31,9 +31,8 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<OrderDTO> getById(@PathVariable Long orderId) {
-        return ResponseEntity.ok(service.findById(orderId));
+    public ResponseEntity<OrderDTO> getById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long orderId) {
+        return ResponseEntity.ok(service.findById(userDetails, orderId));
     }
 
     @PostMapping
@@ -41,5 +40,10 @@ public class OrderController {
         OrderDTO order = service.save(userDetails, dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(order.id()).toUri();
         return ResponseEntity.created(uri).body(order);
+    }
+
+    @PutMapping("/{orderId}")
+    public ResponseEntity<OrderDTO> cancel(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long orderId) {
+        return ResponseEntity.ok(service.cancel(userDetails, orderId));
     }
 }

@@ -2,6 +2,7 @@ package dev.marcos.ecommerce.mapper;
 
 import dev.marcos.ecommerce.model.dto.user.UserDTO;
 import dev.marcos.ecommerce.entity.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserMapper {
 
@@ -29,5 +30,9 @@ public class UserMapper {
                 null,
                 u.role()
         );
+    }
+
+    public static User toEntity(UserDetails userDetails) {
+        return (User) userDetails;
     }
 }

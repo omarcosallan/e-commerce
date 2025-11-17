@@ -5,6 +5,7 @@ import dev.marcos.ecommerce.entity.enums.OrderStatus;
 import dev.marcos.ecommerce.entity.enums.PaymentStatus;
 import dev.marcos.ecommerce.exception.ResourceNotFoundException;
 import dev.marcos.ecommerce.mapper.OrderMapper;
+import dev.marcos.ecommerce.mapper.UserMapper;
 import dev.marcos.ecommerce.model.dto.order.OrderCreateRequest;
 import dev.marcos.ecommerce.model.dto.order.OrderDTO;
 import dev.marcos.ecommerce.model.dto.order.OrderItemRequest;
@@ -47,7 +48,7 @@ public class OrderService {
 
     @Transactional
     public OrderDTO save(UserDetails userDetails, @Valid OrderCreateRequest dto) {
-        User user = toUser(userDetails);
+        User user = UserMapper.toEntity(userDetails);
         Address address = addressService.findById(dto.addressId(), userDetails);
 
         Order order = new Order(null, user, null, OrderStatus.PENDING, null, address);
@@ -94,7 +95,8 @@ public class OrderService {
 
     public OrderDTO cancel(UserDetails userDetails, Long orderId) {
         Order order = getOrder(orderId);
-        CheckPermission.verify((User) userDetails, order.getUser().getId());
+        User user = UserMapper.toEntity(userDetails);
+        CheckPermission.verify(user, order.getUser().getId());
         order.setStatus(OrderStatus.CANCELED);
         orderRepository.save(order);
         return OrderMapper.toDTO(order);
@@ -103,9 +105,5 @@ public class OrderService {
     private Order getOrder(Long orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
-    }
-
-    private User toUser(UserDetails userDetails) {
-        return (User) userDetails;
     }
 }

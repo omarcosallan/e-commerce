@@ -24,10 +24,15 @@ public class OrderController {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<OrderDTO>> getAll() {
         return ResponseEntity.ok(service.findAll());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrderDTO>> getAll(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.findAll(userDetails));
     }
 
     @GetMapping("/{orderId}")

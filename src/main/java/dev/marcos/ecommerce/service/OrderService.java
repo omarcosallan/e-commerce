@@ -40,6 +40,11 @@ public class OrderService {
         return orderRepository.findAll().stream().map(OrderMapper::toDTO).toList();
     }
 
+    public List<OrderDTO> findAll(UserDetails userDetails) {
+        User user = UserMapper.toEntity(userDetails);
+        return orderRepository.findAllByUserId(user.getId()).stream().map(OrderMapper::toDTO).toList();
+    }
+
     public OrderDTO findById(UserDetails userDetails, Long orderId) {
         Order order = getOrder(orderId);
         CheckPermission.verify((User) userDetails, order.getUser().getId());

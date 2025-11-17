@@ -38,7 +38,7 @@ public class Order extends Auditable {
     private Address address;
 
     @OneToMany(mappedBy = "id.order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final Set<OrderItem> items = new HashSet<>();
+    private Set<OrderItem> items = new HashSet<>();
 
     protected Order() {
     }
@@ -102,5 +102,9 @@ public class Order extends Auditable {
 
     public Set<OrderItem> getItems() {
         return items;
+    }
+
+    public void setItems(Set<OrderItem> items) {
+        this.items = items;
     }
 }

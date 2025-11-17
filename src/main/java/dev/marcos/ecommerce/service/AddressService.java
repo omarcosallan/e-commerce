@@ -42,12 +42,20 @@ public class AddressService {
         return addressRepository.findAllByUserId(userId);
     }
 
+    public Address getById(Long addressId) {
+        return getAddress(addressId);
+    }
+
     @Transactional
     public void deleteById(Long addressId, UserDetails userDetails) {
-        Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
+        Address address = getAddress(addressId);
         checkPermission((User) userDetails, address.getUser().getId());
         addressRepository.delete(address);
+    }
+
+    private Address getAddress(Long addressId) {
+        return addressRepository.findById(addressId)
+                .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
     }
 
     private void checkPermission(User user, Long userId) {

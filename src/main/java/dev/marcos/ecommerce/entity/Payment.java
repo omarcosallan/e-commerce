@@ -31,7 +31,7 @@ public class Payment extends Auditable {
 
     protected Payment() {}
 
-    public Payment(long id, Order order, String paymentMethod, BigDecimal totalAmount, PaymentStatus status) {
+    public Payment(Long id, Order order, String paymentMethod, BigDecimal totalAmount, PaymentStatus status) {
         this.id = id;
         this.order = order;
         this.paymentMethod = paymentMethod;

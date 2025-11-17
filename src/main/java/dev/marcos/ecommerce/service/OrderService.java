@@ -48,7 +48,7 @@ public class OrderService {
     @Transactional
     public OrderDTO save(UserDetails userDetails, @Valid OrderCreateRequest dto) {
         User user = toUser(userDetails);
-        Address address = addressService.getById(dto.addressId());
+        Address address = addressService.findById(dto.addressId(), userDetails);
 
         Order order = new Order(null, user, null, OrderStatus.PENDING, null, address);
 

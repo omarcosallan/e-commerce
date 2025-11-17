@@ -1,13 +1,16 @@
 package dev.marcos.ecommerce.controller;
 
+import dev.marcos.ecommerce.entity.Address;
+import dev.marcos.ecommerce.model.dto.address.AddressCreateRequest;
 import dev.marcos.ecommerce.service.AddressService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/address")
@@ -19,9 +22,24 @@ public class AddressController {
         this.addressService = addressService;
     }
 
+    @GetMapping
+    public ResponseEntity<List<Address>> getAll(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(addressService.findAll(userDetails));
+    }
+
+    @GetMapping("/{addressId}")
+    public ResponseEntity<Address> getById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long addressId) {
+        return ResponseEntity.ok(addressService.findById(addressId, userDetails));
+    }
+
+    @PostMapping
+    public ResponseEntity<Address> create(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody AddressCreateRequest dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(addressService.save(userDetails, dto));
+    }
+
     @DeleteMapping("/{addressId}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId, @AuthenticationPrincipal UserDetails userDetails) {
-        addressService.deleteById(addressId, userDetails);
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long addressId) {
+        addressService.deleteById(userDetails, addressId);
         return ResponseEntity.noContent().build();
     }
 }

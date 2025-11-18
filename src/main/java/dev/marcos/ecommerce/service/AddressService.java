@@ -6,6 +6,7 @@ import dev.marcos.ecommerce.exception.ResourceNotFoundException;
 import dev.marcos.ecommerce.mapper.AddressMapper;
 import dev.marcos.ecommerce.mapper.UserMapper;
 import dev.marcos.ecommerce.model.dto.address.AddressCreateRequest;
+import dev.marcos.ecommerce.model.dto.address.AddressUpdateRequest;
 import dev.marcos.ecommerce.repository.AddressRepository;
 import dev.marcos.ecommerce.utils.CheckPermission;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,6 +41,32 @@ public class AddressService {
         User user = UserMapper.toEntity(userDetails);
         Address address = AddressMapper.toEntity(dto);
         address.setUser(user);
+        return addressRepository.save(address);
+    }
+
+    public Address update(UserDetails userDetails, Long addressId, AddressUpdateRequest dto) {
+        User user = UserMapper.toEntity(userDetails);
+        Address address = getAddress(addressId);
+        CheckPermission.verify(user, address.getUser().getId());
+
+        if (dto.street() != null) {
+            address.setStreet(dto.street());
+        }
+        if (dto.number() != null) {
+            address.setNumber(dto.number());
+        }
+        if (dto.city() != null) {
+            address.setCity(dto.city());
+        }
+        if (dto.state() != null) {
+            address.setState(dto.state());
+        }
+        if (dto.complement() != null) {
+            address.setComplement(dto.complement());
+        }
+        if (dto.postalCode() != null) {
+            address.setPostalCode(dto.postalCode());
+        }
         return addressRepository.save(address);
     }
 

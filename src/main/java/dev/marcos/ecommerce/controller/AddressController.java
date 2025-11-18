@@ -2,6 +2,7 @@ package dev.marcos.ecommerce.controller;
 
 import dev.marcos.ecommerce.entity.Address;
 import dev.marcos.ecommerce.model.dto.address.AddressCreateRequest;
+import dev.marcos.ecommerce.model.dto.address.AddressUpdateRequest;
 import dev.marcos.ecommerce.service.AddressService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,11 @@ public class AddressController {
     @PostMapping
     public ResponseEntity<Address> create(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody AddressCreateRequest dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(addressService.save(userDetails, dto));
+    }
+
+    @PutMapping("/{addressId}")
+    public ResponseEntity<Address> update(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long addressId, @Valid @RequestBody AddressUpdateRequest dto) {
+        return ResponseEntity.ok(addressService.update(userDetails, addressId, dto));
     }
 
     @DeleteMapping("/{addressId}")

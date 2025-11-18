@@ -4,7 +4,6 @@ import dev.marcos.ecommerce.entity.Category;
 import dev.marcos.ecommerce.model.dto.category.CategoryRequest;
 import dev.marcos.ecommerce.service.CategoryService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,19 +21,16 @@ public class CategoryController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Category>> getAll() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{categoryId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> getById(@PathVariable long categoryId) {
         return ResponseEntity.ok(service.findById(categoryId));
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> create(@RequestBody CategoryRequest dto) {
         Category category = service.save(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId()).toUri();
@@ -42,13 +38,11 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> update(@PathVariable Long categoryId, @RequestBody CategoryRequest dto) {
         return ResponseEntity.ok(service.update(categoryId, dto));
     }
 
     @DeleteMapping("/{categoryId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long categoryId) {
         service.delete(categoryId);
         return ResponseEntity.noContent().build();

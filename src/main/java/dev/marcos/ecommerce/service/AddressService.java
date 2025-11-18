@@ -45,6 +45,9 @@ public class AddressService {
 
     @Transactional
     public void deleteById(UserDetails userDetails, Long addressId) {
+        if (findAll(userDetails).size() <= 1) {
+            throw new IllegalArgumentException("Não é possível apagar esse endereço");
+        }
         Address address = getAddress(addressId);
         CheckPermission.verify((User) userDetails, address.getUser().getId());
         addressRepository.delete(address);

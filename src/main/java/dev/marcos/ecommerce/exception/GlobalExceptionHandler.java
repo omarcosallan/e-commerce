@@ -42,6 +42,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, status);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e, WebRequest req) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponse error = toErrorResponse(e.getMessage(), req, status);
+        return new ResponseEntity<>(error, status);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException e, WebRequest req) {
         Map<String, String> errors = getErrorsDetails(e);

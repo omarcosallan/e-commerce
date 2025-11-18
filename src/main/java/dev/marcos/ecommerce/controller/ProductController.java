@@ -6,13 +6,14 @@ import dev.marcos.ecommerce.model.dto.product.ProductDTO;
 import dev.marcos.ecommerce.model.dto.product.ProductUpdateRequest;
 import dev.marcos.ecommerce.service.ProductService;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/products")
@@ -25,11 +26,11 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<PaginatedResponse<ProductDTO>> getAll(@RequestParam(required = false, defaultValue = "0") int page,
-                                                             @RequestParam(required = false, defaultValue = "10") int size,
-                                                             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction,
-                                                             @RequestParam(required = false, defaultValue = "lastModifiedDate") String sortField) {
-        return ResponseEntity.ok().body(service.findAll(page, size, direction, sortField));
+    public ResponseEntity<PaginatedResponse<ProductDTO>> getAll(@RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "10") int size,
+                                                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        return ResponseEntity.ok().body(service.findAll(page, size, startDate, endDate));
     }
 
     @GetMapping("/{productId}")

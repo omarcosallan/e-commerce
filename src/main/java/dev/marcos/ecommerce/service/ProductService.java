@@ -12,10 +12,10 @@ import dev.marcos.ecommerce.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,9 +29,12 @@ public class ProductService {
         this.categoryService = categoryService;
     }
 
-    public PaginatedResponse<ProductDTO> findAll(int currentPage, int size, Sort.Direction direction, String sortField) {
-        Pageable pageable = PageRequest.of(currentPage, size, direction, sortField);
-        Page<Product> page = repository.findAll(pageable);
+    public PaginatedResponse<ProductDTO> findAll(int currentPage, int size, LocalDateTime startDate, LocalDateTime endDate) {
+        startDate = startDate == null ? LocalDateTime.now().minusYears(1) : startDate;
+        endDate = endDate == null ? LocalDateTime.now() : endDate;
+
+        Pageable pageable = PageRequest.of(currentPage, size);
+        Page<Product> page = repository.findAllByCreatedDateBetween(pageable, startDate, endDate);
         List<ProductDTO> data = page.getContent().stream().map(ProductMapper::toDTO).toList();
         return new PaginatedResponse<>(
                 data,

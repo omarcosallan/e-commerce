@@ -86,9 +86,6 @@ public class UserService {
         if (dto.lastName() != null) {
             user.setLastName(dto.lastName());
         }
-        if (dto.role() != null) {
-            user.setRole(dto.role());
-        }
 
         repository.save(user);
 

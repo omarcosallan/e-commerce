@@ -10,11 +10,13 @@ import dev.marcos.ecommerce.entity.User;
 import dev.marcos.ecommerce.mapper.UserMapper;
 import dev.marcos.ecommerce.model.PaginatedResponse;
 import dev.marcos.ecommerce.repository.UserRepository;
+import dev.marcos.ecommerce.utils.CheckPermission;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +47,9 @@ public class UserService {
         );
     }
 
-    public UserDTO findById(long id) {
+    public UserDTO findById(UserDetails userDetails, Long id) {
+        User currentUser = UserMapper.toEntity(userDetails);
+        CheckPermission.verify(currentUser, id);
         return UserMapper.toDTO(getUser(id));
     }
 
@@ -66,7 +70,9 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO updateUser(Long id, @Valid UserUpdateRequest dto) {
+    public UserDTO updateUser(UserDetails userDetails, Long id, @Valid UserUpdateRequest dto) {
+        User currentUser = UserMapper.toEntity(userDetails);
+        CheckPermission.verify(currentUser, id);
         User user = getUser(id);
         if (validEmail(dto.email(), user)) {
             user.setEmail(dto.email());
@@ -90,7 +96,8 @@ public class UserService {
     }
 
     private User getUser(long id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
     }
 
     private boolean validEmail(String email, User user) {

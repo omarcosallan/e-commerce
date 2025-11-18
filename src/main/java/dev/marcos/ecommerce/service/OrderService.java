@@ -3,6 +3,7 @@ package dev.marcos.ecommerce.service;
 import dev.marcos.ecommerce.entity.*;
 import dev.marcos.ecommerce.entity.enums.OrderStatus;
 import dev.marcos.ecommerce.entity.enums.PaymentStatus;
+import dev.marcos.ecommerce.entity.enums.Role;
 import dev.marcos.ecommerce.exception.ResourceNotFoundException;
 import dev.marcos.ecommerce.mapper.OrderMapper;
 import dev.marcos.ecommerce.mapper.UserMapper;
@@ -36,13 +37,12 @@ public class OrderService {
         this.addressService = addressService;
     }
 
-    public List<OrderDTO> findAll() {
-        return orderRepository.findAll().stream().map(OrderMapper::toDTO).toList();
-    }
-
     public List<OrderDTO> findAll(UserDetails userDetails) {
         User user = UserMapper.toEntity(userDetails);
-        return orderRepository.findAllByUserId(user.getId()).stream().map(OrderMapper::toDTO).toList();
+        List<Order> orders = user.getRole() == Role.ADMIN
+                ? orderRepository.findAll()
+                : orderRepository.findAllByUserId(user.getId());
+        return orders.stream().map(OrderMapper::toDTO).toList();
     }
 
     public OrderDTO findById(UserDetails userDetails, Long orderId) {

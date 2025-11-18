@@ -24,12 +24,6 @@ public class OrderController {
         this.service = service;
     }
 
-    @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<OrderDTO>> getAll() {
-        return ResponseEntity.ok(service.findAll());
-    }
-
     @GetMapping
     public ResponseEntity<List<OrderDTO>> getAll(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(service.findAll(userDetails));
@@ -41,13 +35,14 @@ public class OrderController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<OrderDTO> create(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody OrderCreateRequest dto) {
         OrderDTO order = service.save(userDetails, dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(order.id()).toUri();
         return ResponseEntity.created(uri).body(order);
     }
 
-    @PutMapping("/{orderId}")
+    @PutMapping("/{orderId}/status")
     public ResponseEntity<OrderDTO> cancel(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long orderId) {
         return ResponseEntity.ok(service.cancel(userDetails, orderId));
     }
